@@ -1,8 +1,8 @@
-import createGellaryCard from "../templates/gellary-card.hbs"
+
 import { UnsplashAPI } from "./unsplash-api";
 import { galleryEl, formEl, loadMoreBtn } from "./refs";
 import { hideLoader, showLoader, hideMoreBtn, showMoreBtn } from "./function";
-
+import { createGellaryCard } from "./gellary-card";
 const unsplashAPI = new UnsplashAPI(12);
 
 formEl.addEventListener("submit", onSubmit);
