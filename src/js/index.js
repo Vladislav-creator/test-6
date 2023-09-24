@@ -1,10 +1,12 @@
-
+import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import { UnsplashAPI } from "./unsplash-api";
 import { galleryEl, formEl, loadMoreBtn } from "./refs";
 import { hideLoader, showLoader, hideMoreBtn, showMoreBtn } from "./function";
 import { createGellaryCard } from "./gellary-card";
 const unsplashAPI = new UnsplashAPI(12);
-
+let simpleLightBox;
 formEl.addEventListener("submit", onSubmit);
 loadMoreBtn.addEventListener("click", onMoreData);
 
@@ -14,9 +16,9 @@ function onSubmit (event) {
   
   const searchQuery = event.currentTarget.elements['user-search-query'].value.trim();
 
-  // if (!searchQuery) {
-  //   return alert('Please enter some value');
-  // }
+  if (!searchQuery) {
+    return Notiflix.Notify.failure('Please enter some value');
+  }
 
   showLoader();
 
@@ -24,7 +26,8 @@ function onSubmit (event) {
 
   unsplashAPI.getPhotos().then(resp => {
     galleryEl.innerHTML = createGellaryCard(resp.results);
-    // alert(`Hi we found ${resp.total} fotos`)
+    simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+    Notiflix.Notify.success(`Hi we found ${resp.total} fotos`)
     if (resp.total < unsplashAPI.perPage) return;
     showMoreBtn();
 
@@ -38,13 +41,13 @@ function onSubmit (event) {
 
 function onMoreData (event) {
   unsplashAPI.page += 1;
-  
+  simpleLightBox.destroy();
   unsplashAPI.getPhotos().then(resp => {
     galleryEl.insertAdjacentHTML('beforeend', createGellaryCard(resp.results));
-    
+    simpleLightBox = new SimpleLightbox('.gallery a').refresh();
     if (unsplashAPI.page === resp.total_pages) {
     hideMoreBtn();
-    // alert("You reached the end")
+    Notiflix.Notify.failure("You reached the end")
   }
   }).catch(error => {
     console.log(error);
