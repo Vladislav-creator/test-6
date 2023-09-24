@@ -14,9 +14,9 @@ function onSubmit (event) {
   
   const searchQuery = event.currentTarget.elements['user-search-query'].value.trim();
 
-  if (!searchQuery) {
-    return alert('Please enter some value');
-  }
+  // if (!searchQuery) {
+  //   return alert('Please enter some value');
+  // }
 
   showLoader();
 
@@ -24,9 +24,7 @@ function onSubmit (event) {
 
   unsplashAPI.getPhotos().then(resp => {
     galleryEl.innerHTML = createGellaryCard(resp.results);
-    console.log(resp.results);
-   
-    alert(`Hi we found ${resp.total} fotos`)
+    // alert(`Hi we found ${resp.total} fotos`)
     if (resp.total < unsplashAPI.perPage) return;
     showMoreBtn();
 
@@ -46,7 +44,7 @@ function onMoreData (event) {
     
     if (unsplashAPI.page === resp.total_pages) {
     hideMoreBtn();
-    alert("You reached the end")
+    // alert("You reached the end")
   }
   }).catch(error => {
     console.log(error);
